@@ -1,11 +1,13 @@
 package ru.samples.spring.cloud.feign;
 
+import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,8 +30,9 @@ public class Application {
 
     @GetMapping("/handle")
     public void handle(@RequestParam String message) throws InterruptedException {
-        log.info("Handle '{}'", message);
-        TimeUnit.SECONDS.sleep(new Random().nextInt(5));
+        int sec = new Random().nextInt(2);
+        log.info("Handle '{}', sec {}", message, sec);
+        TimeUnit.SECONDS.sleep(sec);
     }
 
     @GetMapping("/forward")
@@ -38,9 +41,30 @@ public class Application {
         handleClient.handle(message);
     }
 
-    @FeignClient("handle-client")
+    @FeignClient(name = "handle-client", fallbackFactory = HandleClientFallbackFactory.class)
     public interface HandleClient {
         @GetMapping("/handle")
         void handle(@RequestParam("message") String message);
+    }
+
+    @Component
+    public static class HandleClientFallback implements HandleClient {
+        @Override
+        public void handle(String message) {
+            log.info("Fallback '{}'", message);
+        }
+    }
+
+    @Component
+    static class HandleClientFallbackFactory implements FallbackFactory<HandleClient> {
+        @Override
+        public HandleClient create(final Throwable cause) {
+            return new HandleClient() {
+                @Override
+                public void handle(String message) {
+                    log.info("Fallback '{}', reason was '{}'", message, cause);
+                }
+            };
+        }
     }
 }
