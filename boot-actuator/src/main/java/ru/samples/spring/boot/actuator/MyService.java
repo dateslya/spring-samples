@@ -1,4 +1,4 @@
-package ru.samples.spring.actuator;
+package ru.samples.spring.boot.actuator;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;

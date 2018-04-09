@@ -1,4 +1,4 @@
-package ru.samples.spring.actuator;
+package ru.samples.spring.boot.actuator;
 
 import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Autowired;
