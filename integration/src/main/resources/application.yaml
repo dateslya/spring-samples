@@ -1,0 +1,14 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      group-id: app-group-id
+      properties:
+        spring.json.use.type.headers: true
+    producer:
+      properties:
+        spring.json.add.type.headers: true
+    template:
+      default-topic: kafka.input
