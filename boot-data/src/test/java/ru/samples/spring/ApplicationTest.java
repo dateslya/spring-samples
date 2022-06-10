@@ -1,5 +1,6 @@
-package ru.samples.spring.cloud.feign;
+package ru.samples.spring;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -7,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ApplicationTest {
 
     @Test
-    void main() {
+    void context() {
+        Assertions.assertTrue(true);
     }
 }

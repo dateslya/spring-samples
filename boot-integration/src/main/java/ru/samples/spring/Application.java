@@ -1,4 +1,4 @@
-package integration;
+package ru.samples.spring;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,9 +86,9 @@ public class Application {
 
     @Bean
     public MessagingTemplate messagingTemplate() {
-        MessagingTemplate messagingTemplate = new MessagingTemplate();
-        messagingTemplate.setDestinationResolver(new BeanFactoryMessageChannelDestinationResolver());
-        return messagingTemplate;
+        MessagingTemplate template = new MessagingTemplate();
+        template.setDestinationResolver(new BeanFactoryMessageChannelDestinationResolver());
+        return template;
     }
 
     @KafkaListener(topics = "kafka.output")
